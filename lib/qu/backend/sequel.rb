@@ -60,7 +60,7 @@ module Qu
       end
 
       def queues
-        job_table.distinct(:queue).select_map(:queue) - ['failed']
+        job_table.group(:queue).select_map(:queue) - ['failed']
       end
 
       def reserve(worker, options = { :block => true })
