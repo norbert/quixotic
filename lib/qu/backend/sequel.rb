@@ -96,7 +96,11 @@ module Qu
       end
 
       def failed(payload, error)
-        job_table.where(:id => payload.id).update(:queue => 'failed', :locked_at => nil)
+        if !job_table.where(:id => payload.id).empty?
+          job_table.where(:id => payload.id).update(:queue => 'failed', :locked_at => nil)
+        else
+          insert_job(payload, 'failed')
+        end
       end
 
       def completed(payload)
